@@ -10,30 +10,36 @@ public class Main {
 
         try (BufferedReader br = new BufferedReader(new FileReader("arq.txt"))) {
             
-            // Leitura dos valores iniciais e adição na lista
-            for (String valor : br.readLine().split(" ")) {
-                lista.adicionar(Integer.parseInt(valor));
+            String[] valoresIniciais = br.readLine().split(" ");
+            for (String valor : valoresIniciais) {
+                lista.adicionarNoFinal(Integer.parseInt(valor)); 
             }
+
             
-            // Leitura e processamento das ações
             int numAcoes = Integer.parseInt(br.readLine().trim());
             for (int i = 0; i < numAcoes; i++) {
                 String[] partes = br.readLine().split(" ");
                 String acao = partes[0];
 
                 switch (acao) {
-                    case "A":
-                        lista.adicionar(Integer.parseInt(partes[1]));
-                        System.out.println("Ação: Adicionar | Valor adicionado: " + partes[1]);
+                    case "A": 
+                        int valorAdicionar = Integer.parseInt(partes[1]);
+                        int posicaoAdicionar = Integer.parseInt(partes[2]);
+                        lista.adicionar(valorAdicionar, posicaoAdicionar);
+                        System.out.println("Ação: Adicionar | Valor: " + valorAdicionar + " | Posição: " + posicaoAdicionar);
                         break;
-                    case "R":
-                        lista.remover(Integer.parseInt(partes[1]));
-                        System.out.println("Ação: Remover | Valor removido: " + partes[1]);
+
+                    case "R": 
+                        int valorRemover = Integer.parseInt(partes[1]);
+                        lista.remover(valorRemover);
+                        System.out.println("Ação: Remover | Valor: " + valorRemover);
                         break;
-                    case "P":
+
+                    case "P": 
                         System.out.println("Ação: Imprimir");
                         lista.imprimir();
                         break;
+
                     default:
                         System.out.println("Ação desconhecida: " + acao);
                 }
