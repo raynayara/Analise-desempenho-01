@@ -4,6 +4,7 @@ import psutil  # Para medir o uso de memória
 import statistics  # Para calcular média e mediana
 from openpyxl import Workbook  # Para criar a planilha Excel
 import os  # Para pegar o hostname e usuário atual
+import matplotlib.pyplot as plt
 
 def quick_sort(numbers, low, high):
     if low < high:
@@ -30,6 +31,7 @@ def write_numbers_to_file(numbers, filename):
     with open(filename, 'w') as file:
         for number in numbers:
             file.write(f"{number}\n")  
+
 def save_to_excel(execution_times, memory_usages, avg_time, median_time, avg_memory, median_memory):
     wb = Workbook()
     ws = wb.active
@@ -44,14 +46,53 @@ def save_to_excel(execution_times, memory_usages, avg_time, median_time, avg_mem
     ws.append(["Mediana", median_time, median_memory])
 
     wb.save("resultadosPYTHON_QUICK.xlsx")
-    print("Resultados salvos em resultados.xlsx.")
+    print("Resultados salvos em resultadosPYTHON_QUICK.xlsx.")
+
+def generate_graphs(execution_times, memory_usages, avg_time, median_time, avg_memory, median_memory):
+    # Gráfico de Tempo (média)
+    plt.figure(figsize=(10, 5))
+    plt.plot(range(1, 11), execution_times, label='Tempo de Execução (ms)', color='blue', marker='o')
+    plt.axhline(avg_time, color='red', linestyle='--', label=f'Média Tempo: {avg_time:.2f} ms')
+    plt.axhline(median_time, color='green', linestyle='--', label=f'Mediana Tempo: {median_time:.2f} ms')
+    plt.xlabel('Execuções')
+    plt.ylabel('Tempo (ms)')
+    plt.title('Tempo de Execução do Quick Sort')
+    plt.legend()
+    plt.grid(True)
+    plt.savefig('grafico_tempo.png')
+    plt.show()
+
+    # Gráfico de Memória (média)
+    plt.figure(figsize=(10, 5))
+    plt.plot(range(1, 11), memory_usages, label='Uso de Memória (KB)', color='blue', marker='o')
+    plt.axhline(avg_memory, color='red', linestyle='--', label=f'Média Memória: {avg_memory} KB')
+    plt.axhline(median_memory, color='green', linestyle='--', label=f'Mediana Memória: {median_memory} KB')
+    plt.xlabel('Execuções')
+    plt.ylabel('Memória (KB)')
+    plt.title('Uso de Memória do Quick Sort')
+    plt.legend()
+    plt.grid(True)
+    plt.savefig('grafico_memoria.png')
+    plt.show()
+
+    # Gráfico Comparativo - Tempo vs Memória
+    plt.figure(figsize=(10, 5))
+    plt.plot(range(1, 11), execution_times, label='Tempo de Execução (ms)', color='blue', marker='o')
+    plt.plot(range(1, 11), memory_usages, label='Uso de Memória (KB)', color='orange', marker='x')
+    plt.xlabel('Execuções')
+    plt.ylabel('Valores')
+    plt.title('Comparativo: Tempo de Execução e Uso de Memória')
+    plt.legend()
+    plt.grid(True)
+    plt.savefig('grafico_comparativo.png')
+    plt.show()
 
 def main():
-    input_file = "arqTEST03.txt" 
-    output_file = "arq-saida.txt"  
+    input_file = "arqTEST03.txt"  # Arquivo de entrada com números para ordenar
+    output_file = "PYarq-saida.txt"  # Arquivo de saída com os números ordenados
 
     print("\n" + "---====---" * 5)
-    print("ordenação por Quick Sort")
+    print("Ordenação por Quick Sort")
     print("Linguagem: Python")
     print("Versão:", platform.python_version())
 
@@ -100,13 +141,14 @@ def main():
     write_numbers_to_file(numbers, output_file)
     print(f"Números ordenados salvos em {output_file}.")
 
-    print("\n"+"---====---" * 5)
+    print("\n" + "---====---" * 5)
     print("Resultados Finais:")
     print(f"Tempo - Média: {avg_time:.2f} ms, Mediana: {median_time:.2f} ms")
     print(f"Memória - Média: {avg_memory} KB, Mediana: {median_memory} KB")
     print("---====---" * 5)
 
     save_to_excel(execution_times, memory_usages, avg_time, median_time, avg_memory, median_memory)
+    generate_graphs(execution_times, memory_usages, avg_time, median_time, avg_memory, median_memory)
 
 if __name__ == "__main__":
     main()
