@@ -42,7 +42,7 @@ function calculateMedian(values) {
 }
 
 async function main() {
-    const inputFile = 'arqTEST03.txt';
+    const inputFile = 'arqG.txt';
     const outputExcelFile = 'resultadosJAVASCRIPT_QUICK.xlsx';
     const iterations = 10; 
 

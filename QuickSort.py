@@ -5,15 +5,12 @@ import statistics  # Para calcular média e mediana
 from openpyxl import Workbook  # Para criar a planilha Excel
 import os  # Para pegar o hostname e usuário atual
 import matplotlib.pyplot as plt
+import random  # Para escolher o pivô aleatoriamente
 
-def quick_sort(numbers, low, high):
-    if low < high:
-        pi = partition(numbers, low, high)
-
-        quick_sort(numbers, low, pi - 1)
-        quick_sort(numbers, pi + 1, high)
-
+# Função de partição com escolha de pivô aleatório
 def partition(numbers, low, high):
+    pivot_index = random.randint(low, high)  # Escolhe um pivô aleatório
+    numbers[pivot_index], numbers[high] = numbers[high], numbers[pivot_index]  # Troca o pivô com o último elemento
     pivot = numbers[high]
     i = low - 1
     for j in range(low, high):
@@ -23,19 +20,29 @@ def partition(numbers, low, high):
     numbers[i + 1], numbers[high] = numbers[high], numbers[i + 1]
     return i + 1
 
+# Função para realizar o Quick Sort
+def quick_sort(numbers, low, high):
+    if low < high:
+        pi = partition(numbers, low, high)
+        quick_sort(numbers, low, pi - 1)
+        quick_sort(numbers, pi + 1, high)
+
+# Função para ler os números do arquivo
 def read_numbers_from_file(filename):
     with open(filename, 'r') as file:
-        return [int(line.strip()) for line in file]
+        return [int(line.strip()) for line in file if line.strip().isdigit()]
 
+# Função para salvar os números no arquivo
 def write_numbers_to_file(numbers, filename):
     with open(filename, 'w') as file:
         for number in numbers:
-            file.write(f"{number}\n")  
+            file.write(f"{number}\n")
 
+# Função para salvar os resultados em uma planilha Excel
 def save_to_excel(execution_times, memory_usages, avg_time, median_time, avg_memory, median_memory):
     wb = Workbook()
     ws = wb.active
-    ws.title = "Resultados2"
+    ws.title = "Resultados"
 
     ws.append(["Execução", "Tempo (ms)", "Memória (KB)"])
 
@@ -48,6 +55,7 @@ def save_to_excel(execution_times, memory_usages, avg_time, median_time, avg_mem
     wb.save("resultadosPYTHON_QUICK.xlsx")
     print("Resultados salvos em resultadosPYTHON_QUICK.xlsx.")
 
+# Função para gerar os gráficos
 def generate_graphs(execution_times, memory_usages, avg_time, median_time, avg_memory, median_memory):
     # Gráfico de Tempo (média)
     plt.figure(figsize=(10, 5))
@@ -87,8 +95,9 @@ def generate_graphs(execution_times, memory_usages, avg_time, median_time, avg_m
     plt.savefig('grafico_comparativo.png')
     plt.show()
 
+# Função principal
 def main():
-    input_file = "arqTEST03.txt"  # Arquivo de entrada com números para ordenar
+    input_file = "arqG.txt"  # Arquivo de entrada com números para ordenar
     output_file = "PYarq-saida.txt"  # Arquivo de saída com os números ordenados
 
     print("\n" + "---====---" * 5)

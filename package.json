@@ -1,6 +1,9 @@
 {
   "dependencies": {
+    "plotly.js": "^2.35.2",
+    "plotly.js-dist-min": "^2.35.2",
     "xlsx": "^0.18.5",
-    "xlsx-chart": "^0.4.3"
+    "xlsx-chart": "^0.4.3",
+    "xml2js": "^0.6.2"
   }
 }
