@@ -1,6 +1,7 @@
 const fs = require('fs'); // Para manipular arquivos de texto
 const os = require('os'); // Para informações do sistema
-const xlsx = require('xlsx'); // Para manipular planilhas Excel
+
+// No melhor caso, é Θ(n log2 n) E no pior caso é O(n2)
 
 function showMachineConfig() {
     console.log('Configurações da Máquina');
@@ -25,7 +26,7 @@ function quickSort(numbers) {
     return [...quickSort(left), pivot, ...quickSort(right)];
 }
 
-//ler os números do arquivo
+// Ler os números do arquivo
 function readNumbersFromFile(filename) {
     const data = fs.readFileSync(filename, 'utf8');
     return data.split('\n').filter(line => line.trim() !== '').map(Number);
@@ -43,7 +44,6 @@ function calculateMedian(values) {
 
 async function main() {
     const inputFile = 'arqG.txt';
-    const outputExcelFile = 'resultadosJAVASCRIPT_QUICK.xlsx';
     const iterations = 10; 
 
     let executionTimes = [];
@@ -84,21 +84,6 @@ async function main() {
     console.log("\nResultados Finais:");
     console.log(`Tempo - Média: ${timeMean.toFixed(2)} ms, Mediana: ${timeMedian.toFixed(2)} ms`);
     console.log(`Memória - Média: ${memoryMean.toFixed(2)} KB, Mediana: ${memoryMedian.toFixed(2)} KB`);
-
-    // Salva os resultados em uma planilha Excel
-    const workbook = xlsx.utils.book_new();
-    const worksheetData = [
-        ["Execução", "Tempo (ms)", "Memória (KB)"],
-        ...executionTimes.map((time, index) => [index + 1, time, memoryUsages[index]]),
-        [],
-        ["Média", timeMean.toFixed(2), memoryMean.toFixed(2)],
-        ["Mediana", timeMedian.toFixed(2), memoryMedian.toFixed(2)]
-    ];
-    const worksheet = xlsx.utils.aoa_to_sheet(worksheetData);
-    xlsx.utils.book_append_sheet(workbook, worksheet, "Resultados");
-    xlsx.writeFile(workbook, outputExcelFile);
-
-    console.log(`Planilha com resultados salva em: ${outputExcelFile}`);
 }
 
 main();

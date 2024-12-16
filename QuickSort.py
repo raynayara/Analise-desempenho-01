@@ -2,10 +2,10 @@ import time  # Para medir o tempo de execução
 import platform  # Para pegar informações do sistema e da linguagem
 import psutil  # Para medir o uso de memória
 import statistics  # Para calcular média e mediana
-from openpyxl import Workbook  # Para criar a planilha Excel
 import os  # Para pegar o hostname e usuário atual
-import matplotlib.pyplot as plt
 import random  # Para escolher o pivô aleatoriamente
+
+#	No melhor caso, é Θ(n log2 n) E no pior caso é O(n2)
 
 # Função de partição com escolha de pivô aleatório
 def partition(numbers, low, high):
@@ -37,63 +37,6 @@ def write_numbers_to_file(numbers, filename):
     with open(filename, 'w') as file:
         for number in numbers:
             file.write(f"{number}\n")
-
-# Função para salvar os resultados em uma planilha Excel
-def save_to_excel(execution_times, memory_usages, avg_time, median_time, avg_memory, median_memory):
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "Resultados"
-
-    ws.append(["Execução", "Tempo (ms)", "Memória (KB)"])
-
-    for i in range(10):
-        ws.append([i + 1, execution_times[i], memory_usages[i]])
-
-    ws.append(["Média", avg_time, avg_memory])
-    ws.append(["Mediana", median_time, median_memory])
-
-    wb.save("resultadosPYTHON_QUICK.xlsx")
-    print("Resultados salvos em resultadosPYTHON_QUICK.xlsx.")
-
-# Função para gerar os gráficos
-def generate_graphs(execution_times, memory_usages, avg_time, median_time, avg_memory, median_memory):
-    # Gráfico de Tempo (média)
-    plt.figure(figsize=(10, 5))
-    plt.plot(range(1, 11), execution_times, label='Tempo de Execução (ms)', color='blue', marker='o')
-    plt.axhline(avg_time, color='red', linestyle='--', label=f'Média Tempo: {avg_time:.2f} ms')
-    plt.axhline(median_time, color='green', linestyle='--', label=f'Mediana Tempo: {median_time:.2f} ms')
-    plt.xlabel('Execuções')
-    plt.ylabel('Tempo (ms)')
-    plt.title('Tempo de Execução do Quick Sort')
-    plt.legend()
-    plt.grid(True)
-    plt.savefig('grafico_tempo.png')
-    plt.show()
-
-    # Gráfico de Memória (média)
-    plt.figure(figsize=(10, 5))
-    plt.plot(range(1, 11), memory_usages, label='Uso de Memória (KB)', color='blue', marker='o')
-    plt.axhline(avg_memory, color='red', linestyle='--', label=f'Média Memória: {avg_memory} KB')
-    plt.axhline(median_memory, color='green', linestyle='--', label=f'Mediana Memória: {median_memory} KB')
-    plt.xlabel('Execuções')
-    plt.ylabel('Memória (KB)')
-    plt.title('Uso de Memória do Quick Sort')
-    plt.legend()
-    plt.grid(True)
-    plt.savefig('grafico_memoria.png')
-    plt.show()
-
-    # Gráfico Comparativo - Tempo vs Memória
-    plt.figure(figsize=(10, 5))
-    plt.plot(range(1, 11), execution_times, label='Tempo de Execução (ms)', color='blue', marker='o')
-    plt.plot(range(1, 11), memory_usages, label='Uso de Memória (KB)', color='orange', marker='x')
-    plt.xlabel('Execuções')
-    plt.ylabel('Valores')
-    plt.title('Comparativo: Tempo de Execução e Uso de Memória')
-    plt.legend()
-    plt.grid(True)
-    plt.savefig('grafico_comparativo.png')
-    plt.show()
 
 # Função principal
 def main():
@@ -155,9 +98,6 @@ def main():
     print(f"Tempo - Média: {avg_time:.2f} ms, Mediana: {median_time:.2f} ms")
     print(f"Memória - Média: {avg_memory} KB, Mediana: {median_memory} KB")
     print("---====---" * 5)
-
-    save_to_excel(execution_times, memory_usages, avg_time, median_time, avg_memory, median_memory)
-    generate_graphs(execution_times, memory_usages, avg_time, median_time, avg_memory, median_memory)
 
 if __name__ == "__main__":
     main()

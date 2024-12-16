@@ -1,6 +1,5 @@
 const fs = require('fs'); // Módulo para manipular arquivos
 const os = require('os'); // Módulo para obter informações sobre o sistema operacional
-const xlsx = require('xlsx'); // Biblioteca para manipular planilhas Excel
 
 function showMachineConfig() {
     console.log('Configurações da Máquina');
@@ -51,7 +50,6 @@ function calculateMedian(values) {
 async function main() {
     const inputFile = 'arqG.txt'; 
     const outputFile = 'JSarq.saida.txt'; 
-    const outputExcelFile = 'resultadosJAVASCRIPT_BUBBLE.xlsx'; 
     const iterations = 10; 
 
     let executionTimes = []; 
@@ -72,8 +70,8 @@ async function main() {
     for (let i = 0; i < iterations; i++) {
         const numbers = readNumbersFromFile(inputFile); 
 
-        const startTime = Date.now(); 
-        const startMemory = process.memoryUsage().heapUsed / 1024; 
+        const startTime = Date.now(); // Marca o tempo de início
+        const startMemory = process.memoryUsage().heapUsed / 1024; // Obtém o uso inicial de memória
 
         bubbleSort(numbers);
 
@@ -106,20 +104,6 @@ async function main() {
     console.log(`Tempo - Média: ${timeMean.toFixed(2)} ms, Mediana: ${timeMedian.toFixed(2)} ms`);
     console.log(`Memória - Média: ${memoryMean.toFixed(2)} KB, Mediana: ${memoryMedian.toFixed(2)} KB`);
     console.log('---===---===---===---===---===---===---===---===---\n');
-
-    const workbook = xlsx.utils.book_new();
-    const worksheetData = [
-        ["Execução", "Tempo (ms)", "Memória (KB)"], 
-        ...executionTimes.map((time, index) => [index + 1, time, memoryUsages[index]]), 
-        [],
-        ["Média", timeMean.toFixed(2), memoryMean.toFixed(2)], // Média
-        ["Mediana", timeMedian.toFixed(2), memoryMedian.toFixed(2)] // Mediana
-    ];
-    const worksheet = xlsx.utils.aoa_to_sheet(worksheetData); 
-    xlsx.utils.book_append_sheet(workbook, worksheet, "Resultados"); 
-    xlsx.writeFile(workbook, outputExcelFile); // Salva o arquivo Excel
-
-    console.log(`Planilha com resultados salva em: ${outputExcelFile}`);
 }
 
 main();
